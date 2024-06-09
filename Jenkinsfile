@@ -8,7 +8,13 @@ pipeline {
                 git url:'https://github.com/dineshkshrestha/html5-boilerplate.git',branch:'main'
             }
         }
-        
+              
+        stage('stop docker') {
+            steps {
+                echo 'code build with docker.'
+                sh 'docker stop $(docker ps -q) && docker system prune -a -y'
+            }
+        }
         stage('Build') {
             steps {
                 echo 'code build with docker.'
