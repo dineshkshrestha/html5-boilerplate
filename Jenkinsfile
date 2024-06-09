@@ -12,7 +12,7 @@ pipeline {
         stage('stop docker') {
             steps {
                 echo 'code build with docker.'
-                sh 'docker stop $(docker ps -q) && docker system prune -a -y'
+                sh 'docker stop $(docker ps -q) && docker system prune -a '
             }
         }
         stage('Build') {
