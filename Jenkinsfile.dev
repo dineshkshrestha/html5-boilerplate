@@ -4,27 +4,37 @@ pipeline {
     stages {
         stage('Code Fetch') {
             steps {
-                echo 'code fetch from github.'
-                git url:'https://github.com/dineshkshrestha/html5-boilerplate.git',branch:'dev'
+                echo 'Code fetch from GitHub.'
+                git url: 'https://github.com/dineshkshrestha/html5-boilerplate.git', branch: 'dev'
             }
         }
-              
-      
+        
         stage('Build') {
             steps {
-                echo 'code build with docker.'
-               def containerId = sh(script: "docker ps -q --filter 'name=html-website'", returnStdout: true).trim()
+                echo 'Code build with Docker.'
+                sh 'docker build -t html-website .'
+            }
+        }
+        
+        stage('Stop Previous Container') {
+            steps {
+                echo 'Stopping any running container with the same name.'
+                script {
+                    def containerId = sh(script: "docker ps -aq --filter 'name=html-dev-website'", returnStdout: true).trim()
                     if (containerId) {
                         sh "docker stop ${containerId}"
                         sh "docker rm ${containerId}"
+                    } else {
+                        echo 'No previous container found.'
                     }
+                }
             }
         }
         
         stage('Deploy') {
             steps {
-                echo 'code deployed in container.'
-                sh ' docker run -d -p 3000:80 html-dev-website'
+                echo 'Deploying the new container.'
+                sh 'docker run -d --name html-website -p 80:80 html-dev-website'
             }
         }
     }
