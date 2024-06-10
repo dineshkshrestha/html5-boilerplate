@@ -13,7 +13,11 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'code build with docker.'
-                sh 'docker build -t html-dev-website .'
+               def containerId = sh(script: "docker ps -q --filter 'name=html-website'", returnStdout: true).trim()
+                    if (containerId) {
+                        sh "docker stop ${containerId}"
+                        sh "docker rm ${containerId}"
+                    }
             }
         }
         
