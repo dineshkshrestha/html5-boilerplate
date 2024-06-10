@@ -2,6 +2,15 @@ pipeline {
     agent any
 
     stages {
+        stage('trivy scan') {
+            steps {
+                echo 'code fetch from github.'
+                 sh 'trivy repo https://github.com/dineshkshrestha/html5-boilerplate.git'
+
+            }
+        }
+           
+  stages {
         stage('Code Fetch') {
             steps {
                 echo 'code fetch from github.'
