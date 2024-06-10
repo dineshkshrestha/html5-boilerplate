@@ -13,14 +13,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'code build with docker.'
-                sh 'docker build -t html-website .'
+                sh 'docker build -t html-dev-website .'
             }
         }
         
         stage('Deploy') {
             steps {
                 echo 'code deployed in container.'
-                sh ' docker run -d -p 3000:80 html-website'
+                sh ' docker run -d -p 3000:80 html-dev-website'
             }
         }
     }
